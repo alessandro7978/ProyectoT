@@ -13,41 +13,41 @@ const delitos = async () => {
 }
 
 const respDelitosUsuario = async (id,idCaso) => {
-    const [consulta, metapreguntas] = await db.query(`SELECT DC.idDCL, count(ru.idOR) as total_usuario, (
-        SELECT count(ore.idOR)
+    const [consulta, metapreguntas] = await db.query(`SELECT DC.idDCL, count(RU.idOR) as total_usuario, (
+        SELECT count(ORE.idOR)
         FROM DelitosContraLibertads DC
-        inner join ActosDelitos AD on dc.idDCL = ad.idDCL
-        INNER JOIN Actos ACT on ad.IdActos = act.IdActos
-        INNER JOIN OpcionesRespuesta ORE on act.OpcionesRespuestumIdOR = ore.idOR
-        where dc.idDCL = '${id}'
+        inner join ActosDelitos AD on DC.idDCL = AD.idDCL
+        INNER JOIN Actos ACT on AD.IdActos = ACT.IdActos
+        INNER JOIN OpcionesRespuesta ORE on ACT.OpcionesRespuestumIdOR = ORE.idOR
+        where DC.idDCL = '${id}'
         ) as Total_delito, ((
-        SELECT count(ore.idOR)
+        SELECT count(ORE.idOR)
         FROM DelitosContraLibertads DC
-        inner join ActosDelitos AD on dc.idDCL = ad.idDCL
-        INNER JOIN Actos ACT on ad.IdActos = act.IdActos
-        INNER JOIN OpcionesRespuesta ORE on act.OpcionesRespuestumIdOR = ore.idOR
-        where dc.idDCL = '${id}'
-        ) - count(ru.idOR)) as probable, DC.Nombre
+        inner join ActosDelitos AD on DC.idDCL = AD.idDCL
+        INNER JOIN Actos ACT on AD.IdActos = ACT.IdActos
+        INNER JOIN OpcionesRespuesta ORE on ACT.OpcionesRespuestumIdOR = ORE.idOR
+        where DC.idDCL = '${id}'
+        ) - count(RU.idOR)) as probable, DC.Nombre
         FROM DelitosContraLibertads DC
-        inner join ActosDelitos AD on dc.idDCL = ad.idDCL
-        INNER JOIN Actos ACT on ad.IdActos = act.IdActos
-        INNER JOIN OpcionesRespuesta ORE on act.OpcionesRespuestumIdOR = ore.idOR
-        INNER JOIN Pregunta pe on ore.IdPregunta = pe.idpregunta
-        INNER JOIN respuestaUsuarios RU on ore.idOR = ru.idOR
-        INNER JOIN RespuestaCasos RC on ru.IdRC = rc.IdRC
-        where dc.idDCL = '${id}' and rc.IdRC = '${idCaso}'`);
+        inner join ActosDelitos AD on DC.idDCL = AD.idDCL
+        INNER JOIN Actos ACT on AD.IdActos = ACT.IdActos
+        INNER JOIN OpcionesRespuesta ORE on ACT.OpcionesRespuestumIdOR = ORE.idOR
+        INNER JOIN Pregunta pe on ORE.IdPregunta = pe.idpregunta
+        INNER JOIN respuestaUsuarios RU on ORE.idOR = RU.idOR
+        INNER JOIN RespuestaCasos RC on RU.IdRC = RC.IdRC
+        where DC.idDCL = '${id}' and RC.IdRC = '${idCaso}'`);
     return await consulta;
 }
 
 const delitoUsuario = async (id,idCaso) => {
-    const [consulta, metapreguntas] = await db.query(`SELECT DC.Nombre, pe.pregunta, ore.respuesta, ACT.descripcion FROM DelitosContraLibertads DC
-    inner join ActosDelitos AD on dc.idDCL = ad.idDCL
-    INNER JOIN Actos ACT on ad.IdActos = act.IdActos
-    INNER JOIN OpcionesRespuesta ORE on act.OpcionesRespuestumIdOR = ore.idOR
-    INNER JOIN Pregunta pe on ore.IdPregunta = pe.idpregunta
-    INNER JOIN respuestaUsuarios RU on ore.idOR = ru.idOR
-    INNER JOIN RespuestaCasos RC on ru.IdRC = rc.IdRC
-    where dc.idDCL = '${id}' and rc.IdRC = '${idCaso}'`);
+    const [consulta, metapreguntas] = await db.query(`SELECT DC.Nombre, pe.pregunta, ORE.respuesta, ACT.descripcion FROM DelitosContraLibertads DC
+    inner join ActosDelitos AD on DC.idDCL = AD.idDCL
+    INNER JOIN Actos ACT on AD.IdActos = ACT.IdActos
+    INNER JOIN OpcionesRespuesta ORE on ACT.OpcionesRespuestumIdOR = ORE.idOR
+    INNER JOIN Pregunta pe on ORE.IdPregunta = pe.idpregunta
+    INNER JOIN respuestaUsuarios RU on ORE.idOR = RU.idOR
+    INNER JOIN RespuestaCasos RC on RU.IdRC = RC.IdRC
+    where DC.idDCL = '${id}' and RC.IdRC = '${idCaso}'`);
     
     const grouped = consulta.reduce((acc, item) => { 
         // "acc" es el acumulador, que es "grouped".
