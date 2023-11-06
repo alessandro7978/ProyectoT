@@ -3,7 +3,7 @@ const { RespuestaCaso, SugerenciaCondena } = require("../models/model");
 
 async function preguntas() {
     const [consulta, metapreguntas] = await db.query("SELECT OPR.idOR, PR.pregunta, OPR.respuesta FROM `OpcionesRespuesta` OPR "
-    +"INNER JOIN pregunta PR on OPR.Idpregunta=PR.idpregunta ORDER by PR.idpregunta ASC");
+    +"INNER JOIN Pregunta PR on OPR.Idpregunta=PR.idpregunta ORDER by PR.idpregunta ASC");
     return await consulta;
 }
 
